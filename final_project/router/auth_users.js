@@ -55,10 +55,23 @@ const authenticatedUser = (username,password)=>{ //returns boolean
     //   return res.status(300).json({message: "Yet to be implemented"});
     });
 
+let checkReviewUser = (user, isbn)=>{
+    let book = books[isbn];
+    if(book.reviews.user == user) return true;
+    else return false;
+}
+
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let user = req.session.authorization.username;
+  const isbn = req.params.isbn;
+  if(checkReviewUser(user,isbn)) {
+      books[isbn].reviews //TO DO.
+  }
+  res.send(isbn);
+
+  return res.status(300).json({message: "Yet to be implemented" + req.session.authorization.username});
 });
 
 module.exports.authenticated = regd_users;
