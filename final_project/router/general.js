@@ -29,7 +29,16 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  return res.send(books);
+  
+  let promiseGetAllBooks = new Promise((resolve, reject)=> {
+    let populatedBooks = books;
+    resolve(populatedBooks);
+  });
+
+  promiseGetAllBooks.then(
+      (data)=> res.send(data), 
+      (err)=>console.log(err)
+  );
 //   return res.status(300).json({message: "Yet to be implemented"});
 });
 
@@ -37,9 +46,16 @@ public_users.get('/',function (req, res) {
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
   const isbn = req.params.isbn;
-  let bookByIsbn = {};
-  bookByIsbn[isbn] = books[isbn];
-  res.send(bookByIsbn);
+  let promiseGetBookByIsbn = new Promise((resolve,reject)=> {
+    let bookByIsbn = {};
+    bookByIsbn[isbn] = books[isbn];
+    resolve(bookByIsbn);
+  });
+  
+  promiseGetBookByIsbn.then(
+      (data)=> res.send(data), 
+      (err)=>console.log(err)
+  );
   //   return res.status(300).json({message: "Yet to be implemented"});
  });
   
@@ -47,11 +63,22 @@ public_users.get('/isbn/:isbn',function (req, res) {
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
   const author = req.params.author;
-  let bookByAuthor = {};
-  for(const [key,value] of Object.entries(books)){
-    if(value.author == author) bookByAuthor[key] = value;
-  }
-  res.send(bookByAuthor);
+  let promiseGetBookByAuthor = new Promise((resolve,reject)=> {
+    let bookByAuthor = {};
+    for(const [key,value] of Object.entries(books)){
+        if(value.author == author) {
+            bookByAuthor[key] = value;
+            resolve(bookByAuthor);
+        }
+    }
+  });
+  
+  promiseGetBookByAuthor.then(
+      (data)=> res.send(data),
+
+      (err)=> console.log(err)
+  );
+  
 //   return res.status(300).json({message: "Yet to be implemented"});
 });
 
