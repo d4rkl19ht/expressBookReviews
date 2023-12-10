@@ -75,7 +75,6 @@ public_users.get('/author/:author',function (req, res) {
   
   promiseGetBookByAuthor.then(
       (data)=> res.send(data),
-
       (err)=> console.log(err)
   );
   
@@ -87,10 +86,16 @@ public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const title = req.params.title;
   let bookByTitle = {};
-  for(const [key,value] of Object.entries(books)) {
-      if(value.title == title) bookByTitle[key] = value;
-  }
-  res.send(bookByTitle);
+  let promiseGetAllBooksByTitle = new Promise((resolve,reject)=> {
+    for(const [key,value] of Object.entries(books)) {
+        if(value.title == title) bookByTitle[key] = value;
+    }
+    resolve(bookByTitle);
+  });
+  promiseGetAllBooksByTitle.then(
+      (data)=> res.send(data),
+      (err) => console.log(err)
+  );
 //   return res.status(300).json({message: "Yet to be implemented"});
 });
 
